@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--flowlayout-->
+    <declare-styleable name="NormalFlowLayout">
+        <attr name="auto_select_effect" format="boolean"/>
+        <attr name="max_select" format="integer"/>
+    </declare-styleable>
+</resources>
