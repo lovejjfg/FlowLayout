@@ -58,6 +58,7 @@ public class FlowLayout extends ViewGroup {
     @SuppressWarnings("unused")
     public void setDefaultMode(int layoutMode) {
         this.mLayoutMode = layoutMode;
+        requestLayout();
     }
 
     private int mLayoutMode = FREE_MODE;
@@ -94,7 +95,10 @@ public class FlowLayout extends ViewGroup {
         requestLayoutInner();
 
     }
-
+    @SuppressWarnings("unused")
+    public boolean getLastFull() {
+        return lastFull;
+    }
     /**
      * set the count in every row
      */
@@ -104,6 +108,7 @@ public class FlowLayout extends ViewGroup {
             throw new IllegalArgumentException("the defaltCount must't Less than 1 ");
         }
         mDefalCount = count;
+        requestLayout();
     }
 
     private boolean lastFull = false;
