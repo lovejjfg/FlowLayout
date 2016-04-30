@@ -170,6 +170,9 @@ public class NormalFlowLayout extends FlowLayout implements TagAdapter.OnDataCha
                 }
             } else {
                 child.setChecked(false);
+                if (mOnSelectListener != null) {
+                    mOnSelectListener.onCheckChanged(child, position, false);
+                }
                 mSelectedView.remove(Integer.valueOf(position));
             }
             if (mOnSelectListener != null) {
