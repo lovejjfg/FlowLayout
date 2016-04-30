@@ -3,7 +3,6 @@ package com.lovejjfg.flowlayout_lib;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -57,8 +56,10 @@ public class FlowLayout extends ViewGroup {
      */
     @SuppressWarnings("unused")
     public void setDefaultMode(int layoutMode) {
-        this.mLayoutMode = layoutMode;
-        requestLayout();
+        if (this.mLayoutMode != layoutMode) {
+            this.mLayoutMode = layoutMode;
+            requestLayout();
+        }
     }
 
     private int mLayoutMode = FREE_MODE;
@@ -91,14 +92,18 @@ public class FlowLayout extends ViewGroup {
 
     @SuppressWarnings("unused")
     public void setLastFull(boolean lastFull) {
-        this.lastFull = lastFull;
-        requestLayoutInner();
+        if (this.lastFull != lastFull) {
+            this.lastFull = lastFull;
+            requestLayout();
+        }
 
     }
+
     @SuppressWarnings("unused")
     public boolean getLastFull() {
         return lastFull;
     }
+
     /**
      * set the count in every row
      */
@@ -107,8 +112,10 @@ public class FlowLayout extends ViewGroup {
         if (count <= 0) {
             throw new IllegalArgumentException("the defaltCount must't Less than 1 ");
         }
-        mDefalCount = count;
-        requestLayout();
+        if (mDefalCount != count) {
+            mDefalCount = count;
+            requestLayout();
+        }
     }
 
     private boolean lastFull = false;
@@ -120,9 +127,10 @@ public class FlowLayout extends ViewGroup {
     public void setHorizontalSpacing(int spacing) {
         if (mHorizontalSpacing != spacing) {
             mHorizontalSpacing = spacing;
-            requestLayoutInner();
+            requestLayout();
         }
     }
+
     /**
      * set the VerticalSpacing in px
      */
@@ -130,7 +138,7 @@ public class FlowLayout extends ViewGroup {
     public void setVerticalSpacing(int spacing) {
         if (mVerticalSpacing != spacing) {
             mVerticalSpacing = spacing;
-            requestLayoutInner();
+            requestLayout();
         }
     }
 
@@ -138,18 +146,18 @@ public class FlowLayout extends ViewGroup {
     public void setMaxLines(int count) {
         if (mMaxLinesCount != count) {
             mMaxLinesCount = count;
-            requestLayoutInner();
+            requestLayout();
         }
     }
 
-    private void requestLayoutInner() {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                requestLayout();
-            }
-        });
-    }
+//    private void requestLayoutInner() {
+//        post(new Runnable() {
+//            @Override
+//            public void run() {
+//                requestLayout();
+//            }
+//        });
+//    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
