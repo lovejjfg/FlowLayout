@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Created by Joe on 2016/1/9.
+ * Email lovejjfg@gmail.com
+ */
 public class FlowLayout extends ViewGroup {
 
 
@@ -29,12 +32,14 @@ public class FlowLayout extends ViewGroup {
 
     public static final int DEFAULT_SPACING = 20;
     /**
-     * this is mean you can set an exact count in everyLine ,so you should call
+     * this is mean you can set an exact count in everyLine ,so you should call {@link #setExactCount(int)} to specify how many counts in which row!
+     * <p>你使用精确模式的时候，记得调用 {@link #setExactCount(int)} 去指定每行的数量</p>
      */
     public static final int EXACT_MODE = 1;//精确的模式
     /**
      * this is mean you don't care how many counts in one row,it will fill one row by default!
      * of course ,you can call {@link FlowLayout#setLastFull(boolean)} to specify the last row whether fill the entire row or not!
+     * <p>自由模式，不用关心每行有多少个子View,会自动填充，当然你可以{@link FlowLayout#setLastFull(boolean)}来指定最后一行是否填充一整行！</p>
      */
     public static final int FREE_MODE = 2; //自由模式
 
@@ -91,8 +96,7 @@ public class FlowLayout extends ViewGroup {
     }
 
     /**
-     * set the count in ever
-     * @param count
+     * set the count in every row
      */
     @SuppressWarnings("unused")
     public void setExactCount(int count) {
@@ -104,7 +108,9 @@ public class FlowLayout extends ViewGroup {
 
     private boolean lastFull = false;
 
-
+    /**
+     * set the HorizontalSpacing in px
+     */
     @SuppressWarnings("unused")
     public void setHorizontalSpacing(int spacing) {
         if (mHorizontalSpacing != spacing) {
@@ -112,7 +118,9 @@ public class FlowLayout extends ViewGroup {
             requestLayoutInner();
         }
     }
-
+    /**
+     * set the VerticalSpacing in px
+     */
     @SuppressWarnings("unused")
     public void setVerticalSpacing(int spacing) {
         if (mVerticalSpacing != spacing) {
@@ -140,15 +148,9 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = getWidth();
-        Log.e("width:", width + "");
-        Log.e("MeasureWidth:", getMeasuredWidth() + "");
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - getPaddingRight() - getPaddingLeft();
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
-        Log.e("sizeWidth:", sizeWidth + "");
-        Log.e("sizeHeight:", sizeHeight + "");
         int finalWidth = (sizeWidth - mHorizontalSpacing * ((mDefalCount - 1))) / mDefalCount;
-
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
@@ -160,12 +162,13 @@ public class FlowLayout extends ViewGroup {
                 continue;
             }
             int childWidthMeasureSpec;
+            //不同模式不同的测量方式
             if (mLayoutMode == EXACT_MODE) {
                 childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY);
             } else if (mLayoutMode == FREE_MODE) {
-                childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(finalWidth, modeWidth == MeasureSpec.EXACTLY ? MeasureSpec.AT_MOST : modeWidth);
+                childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(sizeWidth, modeWidth == MeasureSpec.EXACTLY ? MeasureSpec.AT_MOST : modeWidth);
             } else {
-                throw new IllegalArgumentException("there is not your specified LayoutMode!! ");
+                throw new IllegalArgumentException("There is not your specified LayoutMode!! ");
             }
             int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(sizeHeight, modeHeight == MeasureSpec.EXACTLY ? MeasureSpec.AT_MOST : modeHeight);
             // 测量child
@@ -260,9 +263,6 @@ public class FlowLayout extends ViewGroup {
         return false;
     }
 
-    // ==========================================================================
-    // Inner/Nested Classes
-    // ==========================================================================
 
     /**
      * 代表着一行，封装了一行所占高度，该行子View的集合，以及所有View的宽度总和

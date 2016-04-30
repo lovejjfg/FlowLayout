@@ -17,7 +17,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Created by 张俊 on 2016/1/9.
+ * Created by Joe on 2016/1/9.
+ * Email lovejjfg@gmail.com
  */
 public class NormalFlowLayout extends FlowLayout implements TagAdapter.OnDataChangedListener {
     private static final String TAG = "NormalFlowLayout";
