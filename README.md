@@ -11,48 +11,46 @@
  * 单选和复选模式
        mFlowLayout.setmSelectedMax(int count); //最多的选中数量
 
-        mFlowLayout = (NormalFlowLayout) findViewById(R.id.flow);
+            mFlowLayout = (NormalFlowLayout) findViewById(R.id.flow);
+            mFlowLayout.setmSelectedMax(1);
+            mFlowLayout.setTagAdapter(mTagAdapter);
+            mFlowLayout.setOnSelectListener(this);
+            //使用adapter实现布局的填充！！
+            TagAdapter<String> mTagAdapter = new TagAdapter<String>(mVals) {
+            @Override
+            public View getView(FlowLayout parent, int position, String strings) {
+                TextView textView = new TextView(MainActivity.this);
+
+                textView.setGravity(Gravity.CENTER);
+
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+
+                textView.setTextColor(Color.WHITE);
+
+                textView.setBackgroundResource(R.drawable.check_selector);
+
+                textView.setText(mVals[position]);
+
+                return textView;
+            }
+
+            @Override
+            public int getCount() {
+                return mVals.length;
+            }
+            };
 
 
-        mFlowLayout.setmSelectedMax(1);
-        mFlowLayout.setTagAdapter(mTagAdapter);
-        mFlowLayout.setOnSelectListener(this);
-        //使用adapter实现布局的填充！！
-        TagAdapter<String> mTagAdapter = new TagAdapter<String>(mVals) {
-        @Override
-        public View getView(FlowLayout parent, int position, String strings) {
-            TextView textView = new TextView(MainActivity.this);
+            @Override
+            public void onSelected(Set<Integer> selectPosSet) {
 
-            textView.setGravity(Gravity.CENTER);
+            }
 
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-
-            textView.setTextColor(Color.WHITE);
-
-            textView.setBackgroundResource(R.drawable.check_selector);
-
-            textView.setText(mVals[position]);
-
-            return textView;
-        }
-
-        @Override
-        public int getCount() {
-            return mVals.length;
-        }
-        };
-
-
-        @Override
-        public void onSelected(Set<Integer> selectPosSet) {
-
-        }
-
-        @Override
-        public void onCheckChanged(TagView tagView, int position, boolean checked)     {
-            TextView textView = (TextView) tagView.getTagView();
-            textView.setTextColor(checked ? Color.BLUE : Color.WHITE);
-            showText(this, ((TextView) (tagView.getTagView())).getText() + "：" + tagView.isChecked());
-        }
+            @Override
+            public void onCheckChanged(TagView tagView, int position, boolean checked)     {
+                TextView textView = (TextView) tagView.getTagView();
+                textView.setTextColor(checked ? Color.BLUE : Color.WHITE);
+                showText(this, ((TextView) (tagView.getTagView())).getText() + "：" + tagView.isChecked());
+            }
         
 ![FlowLayout](https://raw.githubusercontent.com/lovejjfg/FlowLayout-master/master/flowLayout.gif)
