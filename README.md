@@ -1,3 +1,5 @@
+![FlowLayout](https://raw.githubusercontent.com/lovejjfg/FlowLayout-master/master/flowLayout.gif)
+
 这个流式布局是基于 [hongyangAndroid/FlowLayout](https://github.com/hongyangAndroid/FlowLayout) 然后有以下的丰富:
  * 实现了两种布局模式:
 
@@ -52,5 +54,3 @@
                 textView.setTextColor(checked ? Color.BLUE : Color.WHITE);
                 showText(this, ((TextView) (tagView.getTagView())).getText() + "：" + tagView.isChecked());
             }
-        
-![FlowLayout](https://raw.githubusercontent.com/lovejjfg/FlowLayout-master/master/flowLayout.gif)
