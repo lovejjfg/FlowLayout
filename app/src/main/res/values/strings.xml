@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FlowLayout-master</string>
+    <string name="free_mode">FREE_MODE</string>
+    <string name="exact_mode">EXACT_MODE</string>
+    <string name="full_last">FULL_LAST</string>
+    <string name="count">COUNT</string>
 </resources>

@@ -2,10 +2,13 @@ package com.lovejjfg.flowlayout;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +20,10 @@ import com.lovejjfg.flowlayout_lib.TagView;
 
 import java.util.Random;
 import java.util.Set;
-
+/**
+ * Created by Joe on 2016/1/9.
+ * Email lovejjfg@gmail.com
+ */
 public class MainActivity extends AppCompatActivity implements NormalFlowLayout.OnSelectListener, NormalFlowLayout.OnTagClickListener {
     private static final String TAG = "FLOW";
     private static Toast result;
@@ -77,19 +83,71 @@ public class MainActivity extends AppCompatActivity implements NormalFlowLayout.
                     "樱井优子",
                     "石川施恩惠",
                     "霞理沙",
-                    "苍井空"
+                    "苍井空",
+                    "呵呵哒"
             };
+    private NormalFlowLayout mFlowLayout;
+    private MenuItem menuItem;
+    private boolean isExact;
+    @Nullable
+    private MenuItem countItem;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        NormalFlowLayout mFlowLayout = (NormalFlowLayout) findViewById(R.id.flow);
+        mFlowLayout = (NormalFlowLayout) findViewById(R.id.flow);
+//        mFlowLayout.setLastFull(true);
+
         mFlowLayout.setTagAdapter(mTagAdapter);
         mFlowLayout.setOnTagClickListener(this);
         mFlowLayout.setOnSelectListener(this);
-//        mFlowLayout.setmSelectedMax(3);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        countItem = menu.findItem(R.id.count);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exact_mode:
+                if (countItem != null) {
+                    countItem.setVisible(true);
+                }
+                mFlowLayout.setDefaultMode(FlowLayout.EXACT_MODE);
+                mFlowLayout.setExactCount(3);
+                break;
+            case R.id.free_mode:
+                if (countItem != null) {
+                    countItem.setVisible(false);
+                }
+                mFlowLayout.setDefaultMode(FlowLayout.FREE_MODE);
+                break;
+            case R.id.full_last:
+                mFlowLayout.setLastFull(!mFlowLayout.getLastFull());
+                break;
+            case R.id.count_2:
+                mFlowLayout.setExactCount(2);
+                break;
+            case R.id.count_3:
+                mFlowLayout.setExactCount(3);
+                break;
+            case R.id.count_4:
+                mFlowLayout.setExactCount(4);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     TagAdapter<String> mTagAdapter = new TagAdapter<String>(mVals) {

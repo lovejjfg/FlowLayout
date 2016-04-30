@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group>
+        <item
+            android:id="@+id/free_mode"
+            android:orderInCategory="100"
+            android:title="@string/free_mode"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/exact_mode"
+            android:orderInCategory="100"
+            android:title="@string/exact_mode"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/full_last"
+            android:orderInCategory="100"
+            android:title="@string/full_last"
+            app:showAsAction="never"/>
+
+    </group>
+
+    <item
+        android:id="@+id/count"
+        android:title="@string/count"
+        android:visible="false"
+        app:showAsAction="ifRoom"
+        >
+        <menu>
+            <group
+                android:id="@+id/exact_count"
+
+                >
+                <item
+                    android:id="@+id/count_2"
+
+                    android:title="2"/>
+                <item
+                    android:id="@+id/count_3"
+                    android:title="3"/>
+                <item
+                    android:id="@+id/count_4"
+                    android:title="4"/>
+            </group>
+        </menu>
+
+    </item>
+
+
+</menu>
