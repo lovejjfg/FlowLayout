@@ -3,6 +3,7 @@ package com.lovejjfg.flowlayout_lib;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,8 +28,35 @@ public class FlowLayout extends ViewGroup {
     }
 
     public static final int DEFAULT_SPACING = 20;
+    /**
+     * this is mean you can set an exact count in everyLine ,so you should call
+     */
+    public static final int EXACT_MODE = 1;//精确的模式
+    /**
+     * this is mean you don't care how many counts in one row,it will fill one row by default!
+     * of course ,you can call {@link FlowLayout#setLastFull(boolean)} to specify the last row whether fill the entire row or not!
+     */
+    public static final int FREE_MODE = 2; //自由模式
+
     private static final int SPACE_NO_NEED = -1;
     private static final int SPACE_NEED = -2;
+    private static final int DEFALT_COUNT = 2;
+
+    @SuppressWarnings("unused")
+    public int getDefaultMode() {
+        return mLayoutMode;
+    }
+
+    /**
+     * you can use  {@link #EXACT_MODE}  or {@link #FREE_MODE}
+     */
+    @SuppressWarnings("unused")
+    public void setDefaultMode(int layoutMode) {
+        this.mLayoutMode = layoutMode;
+    }
+
+    private int mLayoutMode = FREE_MODE;
+    private int mDefalCount = DEFALT_COUNT;
     /**
      * 横向间隔
      */
@@ -48,14 +76,36 @@ public class FlowLayout extends ViewGroup {
     /**
      * 代表每一行的集合
      */
-    private final List<Line> mLines = new ArrayList<Line>();
+    private final List<Line> mLines = new ArrayList<>();
     private Line mLine = null;
     /**
      * 最大的行数
      */
     private int mMaxLinesCount = Integer.MAX_VALUE;
 
+    @SuppressWarnings("unused")
+    public void setLastFull(boolean lastFull) {
+        this.lastFull = lastFull;
+        requestLayoutInner();
 
+    }
+
+    /**
+     * set the count in ever
+     * @param count
+     */
+    @SuppressWarnings("unused")
+    public void setExactCount(int count) {
+        if (count <= 0) {
+            throw new IllegalArgumentException("the defaltCount must't Less than 1 ");
+        }
+        mDefalCount = count;
+    }
+
+    private boolean lastFull = false;
+
+
+    @SuppressWarnings("unused")
     public void setHorizontalSpacing(int spacing) {
         if (mHorizontalSpacing != spacing) {
             mHorizontalSpacing = spacing;
@@ -63,6 +113,7 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
+    @SuppressWarnings("unused")
     public void setVerticalSpacing(int spacing) {
         if (mVerticalSpacing != spacing) {
             mVerticalSpacing = spacing;
@@ -70,6 +121,7 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
+    @SuppressWarnings("unused")
     public void setMaxLines(int count) {
         if (mMaxLinesCount != count) {
             mMaxLinesCount = count;
@@ -78,13 +130,24 @@ public class FlowLayout extends ViewGroup {
     }
 
     private void requestLayoutInner() {
-        requestLayout();
+        post(new Runnable() {
+            @Override
+            public void run() {
+                requestLayout();
+            }
+        });
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = getWidth();
+        Log.e("width:", width + "");
+        Log.e("MeasureWidth:", getMeasuredWidth() + "");
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - getPaddingRight() - getPaddingLeft();
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
+        Log.e("sizeWidth:", sizeWidth + "");
+        Log.e("sizeHeight:", sizeHeight + "");
+        int finalWidth = (sizeWidth - mHorizontalSpacing * ((mDefalCount - 1))) / mDefalCount;
 
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
@@ -96,7 +159,14 @@ public class FlowLayout extends ViewGroup {
             if (child.getVisibility() == GONE) {
                 continue;
             }
-            int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(sizeWidth, modeWidth == MeasureSpec.EXACTLY ? MeasureSpec.AT_MOST : modeWidth);
+            int childWidthMeasureSpec;
+            if (mLayoutMode == EXACT_MODE) {
+                childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY);
+            } else if (mLayoutMode == FREE_MODE) {
+                childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(finalWidth, modeWidth == MeasureSpec.EXACTLY ? MeasureSpec.AT_MOST : modeWidth);
+            } else {
+                throw new IllegalArgumentException("there is not your specified LayoutMode!! ");
+            }
             int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(sizeHeight, modeHeight == MeasureSpec.EXACTLY ? MeasureSpec.AT_MOST : modeHeight);
             // 测量child
             child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
@@ -161,7 +231,7 @@ public class FlowLayout extends ViewGroup {
                 if (i < linesCount - 1) {
                     oneLine.layoutView(left, top);//布局每一行
                 } else {
-                    oneLine.layoutView(left, top, SPACE_NO_NEED);
+                    oneLine.layoutView(left, top, lastFull ? SPACE_NEED : SPACE_NO_NEED);
                 }
                 top += oneLine.mHeight + mVerticalSpacing;//为下一行的top赋值
             }
@@ -200,7 +270,7 @@ public class FlowLayout extends ViewGroup {
     class Line {
         int mWidth = 0;// 该行中所有的子View累加的宽度
         int mHeight = 0;// 该行中所有的子View中高度的那个子View的高度
-        List<View> views = new ArrayList<View>();
+        List<View> views = new ArrayList<>();
 
         public void addView(View view) {// 往该行中添加一个
             views.add(view);
@@ -219,7 +289,6 @@ public class FlowLayout extends ViewGroup {
 
         public void layoutView(int l, int t, int flag) {
             int left = l;
-            int top = t;
             int count = getViewCount();
             //总宽度
             int layoutWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
@@ -246,15 +315,13 @@ public class FlowLayout extends ViewGroup {
                         view.measure(widthMeasureSpec, heightMeasureSpec);
                     }
                     //布局View
-                    view.layout(left, top + topOffset, left + childWidth, top + topOffset + childHeight);
+                    view.layout(left, t + topOffset, left + childWidth, t + topOffset + childHeight);
                     left += childWidth + mHorizontalSpacing; //为下一个View的left赋值
                 }
             } else {
                 if (count == 1) {
                     View view = views.get(0);
-                    view.layout(left, top, left + view.getMeasuredWidth(), top + view.getMeasuredHeight());
-                } else {
-                    // 走到这里来，应该是代码出问题了，目前按照逻辑来看，是不可能走到这一步
+                    view.layout(left, t, left + view.getMeasuredWidth(), t + view.getMeasuredHeight());
                 }
             }
         }
