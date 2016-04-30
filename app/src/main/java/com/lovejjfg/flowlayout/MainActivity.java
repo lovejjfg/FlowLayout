@@ -24,7 +24,7 @@ import java.util.Set;
  * Created by Joe on 2016/1/9.
  * Email lovejjfg@gmail.com
  */
-public class MainActivity extends AppCompatActivity implements NormalFlowLayout.OnSelectListener, NormalFlowLayout.OnTagClickListener {
+public class MainActivity extends AppCompatActivity implements NormalFlowLayout.OnSelectListener {
     private static final String TAG = "FLOW";
     private static Toast result;
 
@@ -98,10 +98,8 @@ public class MainActivity extends AppCompatActivity implements NormalFlowLayout.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mFlowLayout = (NormalFlowLayout) findViewById(R.id.flow);
-//        mFlowLayout.setLastFull(true);
-
+        mFlowLayout.setmSelectedMax(1);
         mFlowLayout.setTagAdapter(mTagAdapter);
-        mFlowLayout.setOnTagClickListener(this);
         mFlowLayout.setOnSelectListener(this);
     }
 
@@ -151,8 +149,6 @@ public class MainActivity extends AppCompatActivity implements NormalFlowLayout.
     }
 
     TagAdapter<String> mTagAdapter = new TagAdapter<String>(mVals) {
-        final Random random = new Random();
-
         @Override
         public View getView(FlowLayout parent, int position, String strings) {
             TextView textView = new TextView(MainActivity.this);
@@ -176,20 +172,17 @@ public class MainActivity extends AppCompatActivity implements NormalFlowLayout.
         }
     };
 
-    @Override
-    public boolean onTagClick(View view, int position, FlowLayout parent) {
-        TagView tagView = (TagView) view;
-
-        showText(this, ((TextView) (tagView.getTagView())).getText() + "：" + tagView.isChecked());
-
-        TextView textView = (TextView) tagView.getTagView();
-        textView.setTextColor(tagView.isChecked() ? Color.BLUE : Color.WHITE);
-        return false;
-    }
 
     @Override
     public void onSelected(Set<Integer> selectPosSet) {
 
+    }
+
+    @Override
+    public void onCheckChanged(TagView tagView, int position, boolean checked) {
+        TextView textView = (TextView) tagView.getTagView();
+        textView.setTextColor(checked ? Color.BLUE : Color.WHITE);
+        showText(this, ((TextView) (tagView.getTagView())).getText() + "：" + tagView.isChecked());
     }
 
     public void showText(Context context, String text) {
