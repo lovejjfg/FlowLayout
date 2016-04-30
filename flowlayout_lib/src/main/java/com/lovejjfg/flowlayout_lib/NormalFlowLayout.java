@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -111,9 +112,6 @@ public class NormalFlowLayout extends FlowLayout implements TagAdapter.OnDataCha
         int pos = findPosByView(child);
         if (child != null) {
             doSelect(child, pos);
-            if (mOnTagClickListener != null) {
-                return mOnTagClickListener.onTagClick(child, pos, this);
-            }
         }
         return true;
     }
@@ -152,13 +150,22 @@ public class NormalFlowLayout extends FlowLayout implements TagAdapter.OnDataCha
                     Integer preIndex = iterator.next();
                     TagView pre = (TagView) getChildAt(preIndex);
                     pre.setChecked(false);
+                    if (mOnSelectListener != null) {
+                        mOnSelectListener.onCheckChanged(pre, position, false);
+                    }
                     child.setChecked(true);
+                    if (mOnSelectListener != null) {
+                        mOnSelectListener.onCheckChanged(child,position,true);
+                    }
                     mSelectedView.remove(preIndex);
                     mSelectedView.add(position);
                 } else {
                     if (mSelectedMax > 0 && mSelectedView.size() >= mSelectedMax)
                         return;
                     child.setChecked(true);
+                    if (mOnSelectListener != null) {
+                        mOnSelectListener.onCheckChanged(child, position, true);
+                    }
                     mSelectedView.add(position);
                 }
             } else {
@@ -178,8 +185,10 @@ public class NormalFlowLayout extends FlowLayout implements TagAdapter.OnDataCha
 
     public interface OnSelectListener {
         void onSelected(Set<Integer> selectPosSet);
-    }
 
+        void onCheckChanged(TagView view, int position, boolean checked);
+    }
+    @Nullable
     private OnSelectListener mOnSelectListener;
 
     public void setOnSelectListener(OnSelectListener onSelectListener) {
@@ -187,17 +196,6 @@ public class NormalFlowLayout extends FlowLayout implements TagAdapter.OnDataCha
         if (mOnSelectListener != null) setClickable(true);
     }
 
-    public interface OnTagClickListener {
-        boolean onTagClick(View view, int position, FlowLayout parent);
-    }
-
-    private OnTagClickListener mOnTagClickListener;
-
-
-    public void setOnTagClickListener(OnTagClickListener onTagClickListener) {
-        mOnTagClickListener = onTagClickListener;
-        if (onTagClickListener != null) setClickable(true);
-    }
 
     @Override
     protected Parcelable onSaveInstanceState()
