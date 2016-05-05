@@ -1,6 +1,10 @@
 ![FlowLayout](https://raw.githubusercontent.com/lovejjfg/FlowLayout-master/master/flowLayout.gif)
 
-这个流式布局是基于 [hongyangAndroid/FlowLayout](https://github.com/hongyangAndroid/FlowLayout) 然后有以下的丰富:
+这个流式布局点击及布局加载来源于 [hongyangAndroid/FlowLayout](https://github.com/hongyangAndroid/FlowLayout) 然后有以下的丰富:
+ * 支持单选和多选模式：
+  
+	  mFlowLayout.setmSelectedMax(1);
+
  * 实现了两种布局模式:
 
 > EXACT_MODE :精确模式，这个模式下，你需要指定每一行默认展示多少个条目。这个看起来是整齐的！这个比较适合那些字数比较固定的展示方式！
