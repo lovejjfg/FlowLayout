@@ -151,7 +151,7 @@ public class NormalFlowLayout extends FlowLayout implements TagAdapter.OnDataCha
                     TagView pre = (TagView) getChildAt(preIndex);
                     pre.setChecked(false);
                     if (mOnSelectListener != null) {
-                        mOnSelectListener.onCheckChanged(pre, position, false);
+                        mOnSelectListener.onCheckChanged(pre, preIndex, false);
                     }
                     child.setChecked(true);
                     if (mOnSelectListener != null) {
