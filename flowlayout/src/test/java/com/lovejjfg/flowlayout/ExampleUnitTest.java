@@ -1,4 +1,4 @@
-package com.lovejjfg.flowlayout_lib;
+package com.lovejjfg.flowlayout;
 
 import org.junit.Test;
 

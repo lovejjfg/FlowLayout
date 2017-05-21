@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     >
 
-    <com.lovejjfg.flowlayout_lib.NormalFlowLayout
+    <com.lovejjfg.flowlayout.CheckableFlowLayout
         android:id="@+id/flow"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -18,7 +18,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         app:max_select="6"
-        tools:context="com.lovejjfg.flowlayout.MainActivity"/>
+        tools:context="com.lovejjfg.demo.MainActivity"/>
 
 
 </ScrollView>

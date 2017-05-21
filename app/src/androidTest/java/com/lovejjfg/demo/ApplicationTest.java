@@ -1,4 +1,4 @@
-package com.lovejjfg.flowlayout_lib;
+package com.lovejjfg.demo;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

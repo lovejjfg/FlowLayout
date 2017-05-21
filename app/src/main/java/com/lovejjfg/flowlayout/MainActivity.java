@@ -2,9 +2,9 @@ package com.lovejjfg.flowlayout;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -13,13 +13,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lovejjfg.flowlayout_lib.FlowLayout;
-import com.lovejjfg.flowlayout_lib.NormalFlowLayout;
-import com.lovejjfg.flowlayout_lib.TagAdapter;
-import com.lovejjfg.flowlayout_lib.TagView;
-
-import java.util.Random;
 import java.util.Set;
+
 /**
  * Created by Joe on 2016/1/9.
  * Email lovejjfg@gmail.com
